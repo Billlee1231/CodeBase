@@ -7,11 +7,11 @@ require(xts)
 # tweet
 {
 tweet		<-	setRefClass("tweet",
-	fields	=	list(id_str="character", created_at="POSIXct", text="character", place="list", coordinates="Coordinates", user="list"),
+	fields	=	list(id_str="character", created_at="POSIXct", text="character", place="Place", coordinates="Coordinates", user="list"),
 	methods =	list(
 						initialize	=	function(lst=list(id_str=character(), created_at=character(), text=character(), place=list(), coordinates=list(), user=list()))
 										{											
-											directflds		<-	c("id_str","text","place","user")
+											directflds		<-	c("id_str","text","user")
 											for (elt in directflds)
 											{
 												if (!is.null(lst[[elt]]))
@@ -20,7 +20,9 @@ tweet		<-	setRefClass("tweet",
 											if (!is.null(lst[["created_at"]]))
 												.self[["created_at"]]	<-	as.POSIXct(strptime(lst[["created_at"]], format="%a %b %d %H:%M:%S %z %Y"))
 											if (!is.null(lst[["coordinates"]]))
-												.self[["coordinates"]]	<-	Coordinates$new(lst[["coordinates"]])											
+												.self[["coordinates"]]	<-	Coordinates$new(lst[["coordinates"]])
+											if (!is.null(lst[["place"]]))
+												.self[["place"]]	<-	Place$new(lst[["place"]])											
 										},
 						getID		=	function()
 										{
@@ -32,7 +34,7 @@ tweet		<-	setRefClass("tweet",
 										},
 						getPlace	=	function()
 										{
-											return(.self$place)
+											return(.self$place$getFull_name())
 										},
 						getCoord	=	function()
 										{
@@ -76,10 +78,10 @@ tweet.l		<-	setRefClass("tweet.l",
 						getPlaces		=	function()
 						{
 							lth		<-	length(.self[["tweets"]])
-							places	<-	vector(mode = "list", length = lth)
+							places	<-	vector(mode = "character", length = lth)
 							for (i in 1:lth)
 							{
-								places[[i]]	<-	.self[["tweets"]][[i]]$getPlace()
+								places[i]	<-	.self[["tweets"]][[i]]$getPlace()
 							}
 							return(places)
 						},

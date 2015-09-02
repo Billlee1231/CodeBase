@@ -5,17 +5,18 @@
 # coordinates
 {
 Coordinates		<-	setRefClass("Coordinates",
-	fields	=	list(longitude="numeric", latitude="numeric", type="character"),
+	fields	=	list(value="numeric", type="character"),
 	methods	=	list(
 						initialize	=	function(lst=list(coordinates=numeric(), type=character()))
 						{
-							.self[["longitude"]]	<-	lst[["coordinates"]][1]
-							.self[["latitude"]]		<-	lst[["coordinates"]][2]
-							.self[["type"]]			<-	lst[["type"]]
+							if (!is.null(lst[["coordinates"]]))
+								.self[["value"]]		<-	lst[["coordinates"]]
+							if (!is.null(lst[["type"]]))
+								.self[["type"]]			<-	lst[["type"]]
 						},
 						getCoord	=	function()
 						{
-							return(c(.self[["longitude"]], .self[["latitude"]]))
+							return(c(.self[["value"]]))
 						},
 						getType		=	function()
 						{

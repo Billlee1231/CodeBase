@@ -1,10 +1,16 @@
 setwd("C:/Users/Yichu/Desktop/Data_Analytics_Business_Insight/Code/CodeBase")
 
 source("Twitter_Coordinates.R")
+source("Twitter_Place.R")
 source("Twitter_Tweet.R")
 
 
+
 # test code
+e	<-	place$new(coord.nonull[[1]][["place"]])
+e$getFull_name()
+e$getGeometry()
+
 d	<-	Coordinates$new(coord.nonull[[1]][["coordinates"]])
 d$getCoord()
 d$getType()
