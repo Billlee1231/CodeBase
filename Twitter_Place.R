@@ -5,9 +5,9 @@
 # place
 {
 Place		<-	setRefClass("Place",
-	fields	=	list(name="character", country="character", country_code="character",full_name="character", geometry="Coordinates"),
+	fields	=	list(name="character", country="character", country_code="character",full_name="character", geometry="Coordinates", bounding_box="Coordinates"),
 	methods	=	list(
-						initialize	=	function(lst=list(name=character(), country=character(), country_code=character(), full_name=character(), geometry=list()))
+						initialize	=	function(lst=list(name=character(), country=character(), country_code=character(), full_name=character(), geometry=list(), bounding_box=list()))
 						{
 							directflds	<-	c("name","country","country_code","full_name")
 							for (elt in directflds)
@@ -16,7 +16,9 @@ Place		<-	setRefClass("Place",
 									.self[[elt]]	<-	lst[[elt]]
 							}
 							if (!is.null(lst[["geometry"]]))
-								.self[["geometry"]]	<-	Coordinates$new(lst[["geometry"]])
+								.self[["geometry"]]		<-	Coordinates$new(lst[["geometry"]])
+							if (!is.null(lst[["bounding_box"]]))
+								.self[["bounding_box"]]	<-	Coordinates$new(lst[["bounding_box"]])
 						},
 						getName		=	function()
 						{
@@ -40,6 +42,10 @@ Place		<-	setRefClass("Place",
 						getGeometry	=	function()
 						{
 							return(.self$geometry$getCoord())
+						},
+						getBounding_box	=	function()
+						{
+							return(.self$bounding_box$getCoord())
 						}
 					)
 )

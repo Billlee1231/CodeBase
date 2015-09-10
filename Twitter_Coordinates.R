@@ -5,18 +5,18 @@
 # coordinates
 {
 Coordinates		<-	setRefClass("Coordinates",
-	fields	=	list(value="numeric", type="character"),
+	fields	=	list(value="matrix", type="character"),
 	methods	=	list(
-						initialize	=	function(lst=list(coordinates=numeric(), type=character()))
+						initialize	=	function(lst=list(coordinates=matrix(), type=character()))
 						{
 							if (!is.null(lst[["coordinates"]]))
-								.self[["value"]]		<-	lst[["coordinates"]]
+								.self[["value"]]		<-	matrix(unlist(lst[["coordinates"]]),ncol=2,byrow=TRUE)
 							if (!is.null(lst[["type"]]))
 								.self[["type"]]			<-	lst[["type"]]
 						},
 						getCoord	=	function()
 						{
-							return(c(.self[["value"]]))
+							return(.self[["value"]])
 						},
 						getType		=	function()
 						{

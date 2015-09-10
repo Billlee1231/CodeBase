@@ -7,9 +7,10 @@ source("Twitter_Tweet.R")
 
 
 # test code
-e	<-	place$new(coord.nonull[[1]][["place"]])
+e	<-	Place$new(coord.nonull[[1]][["place"]])
 e$getFull_name()
 e$getGeometry()
+e$getBounding_box()
 
 d	<-	Coordinates$new(coord.nonull[[1]][["coordinates"]])
 d$getCoord()
