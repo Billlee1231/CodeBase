@@ -1,0 +1,14 @@
+//import json file
+mongoimport --db twitter --collection tweets_sample --type json --file C:\Users\Yichu\Desktop\Data_analytics_Business_insight\Data\tweet_NYC.json --jsonArray
+
+//make a simple query
+db.tweets_sample.find({"id_str":"636433425336037376"})
+
+//aggregation
+db.tweets_sample.aggregate(
+	[
+		{$project:	{min:{ $substr:["$created_at",4,12]}}},
+		{$group:{"_id":"$min", "count":{$sum: 1}}},
+		{$out: "min_count"}
+	]
+)

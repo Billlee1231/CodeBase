@@ -4,25 +4,74 @@
 
 require(xts)
 
-# tweet
+# tweet old
+if(FALSE)
 {
 tweet		<-	setRefClass("tweet",
-	fields	=	list(id_str="character", created_at="POSIXct", text="character", place="Place", coordinates="Coordinates", user="list"),
+	fields	=	list(id_str="character", created_at="POSIXct", text="character", place="Place", coordinates="Coordinates", user="User"),
 	methods =	list(
 						initialize	=	function(lst=list(id_str=character(), created_at=character(), text=character(), place=list(), coordinates=list(), user=list()))
 										{											
-											directflds		<-	c("id_str","text","user")
+											directflds		<-	c("id_str","text")
 											for (elt in directflds)
 											{
 												if (!is.null(lst[[elt]]))
 													.self[[elt]]	<-	lst[[elt]]
 											}
 											if (!is.null(lst[["created_at"]]))
-												.self[["created_at"]]	<-	as.POSIXct(strptime(lst[["created_at"]], format="%a %b %d %H:%M:%S %z %Y"))
+												.self[["created_at"]]	<-	as.POSIXct(strptime(lst[["created_at"]], format="%a %b %d %H:%M:%S %z %Y")) # raw data is in UTC, this will convert to current time zone: EDT
 											if (!is.null(lst[["coordinates"]]))
 												.self[["coordinates"]]	<-	Coordinates$new(lst[["coordinates"]])
 											if (!is.null(lst[["place"]]))
-												.self[["place"]]	<-	Place$new(lst[["place"]])											
+												.self[["place"]]	<-	Place$new(lst[["place"]])
+											if	(!is.null(lst[["user"]]))
+												.self[["user"]]		<-	User$new(lst[["user"]])
+										},
+						getID		=	function()
+										{
+											return(.self$id_str)
+										},
+						getTime		=	function()
+										{
+											return(.self$created_at)
+										},
+						getPlace	=	function()
+										{
+											return(.self$place$getFull_name())
+										},
+						getCoord	=	function()
+										{
+											return(.self$coordinates$getCoord())
+										},
+						getUser		=	function()
+										{
+											return(.self$user)
+										}
+						)
+)
+}
+
+# tweet new
+{
+tweet		<-	setRefClass("tweet",
+	fields	=	list(id_str="character", created_at="POSIXct", text="character", place="character", coordinates="Coordinates", user="character"),
+	methods =	list(
+						initialize	=	function(lst=list(id_str=character(), created_at=character(), text=character(), place=list(), coordinates=list(), user=list()))
+										{											
+											directflds		<-	c("id_str","text")
+											for (elt in directflds)
+											{
+												if (!is.null(lst[[elt]]))
+													.self[[elt]]	<-	lst[[elt]]
+											}
+											if (!is.null(lst[["created_at"]]))
+												.self[["created_at"]]	<-	as.POSIXct(strptime(lst[["created_at"]], format="%a %b %d %H:%M:%S %z %Y")) # raw data is in UTC, this will convert to current time zone: EDT
+											if (!is.null(lst[["coordinates"]]))
+												.self[["coordinates"]]	<-	Coordinates$new(lst[["coordinates"]])
+											if (!is.null(lst[["place"]]))
+												.self[["place"]]	<-	lst[["place"]][["id"]]
+											if	(!is.null(lst[["user"]]))
+												.self[["user"]]		<-	lst[["user"]][["id_str"]]
 										},
 						getID		=	function()
 										{
