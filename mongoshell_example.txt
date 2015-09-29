@@ -12,3 +12,29 @@ db.tweets_sample.aggregate(
 		{$out: "min_count"}
 	]
 )
+
+//make a query based on created_at
+db.tweets_sample.find(
+	{
+		"created_at": {$lte:"Sun Aug 30 22:00:00 +0000 2015"},
+		"created_at": {$gt:"Sun Aug 30 21:00:00 +0000 2015"}
+	},
+	{
+		"text":1
+	}
+)
+
+//make a query based on timestamp_ms
+db.tweets.find(
+	{
+		"timestamp_ms" : {$gte:"1440572527619", $lt: "1440572541920"}
+	},
+	{
+		"text":1,
+		"timestamp_ms":1,
+		"created_at":1
+	}
+)
+
+//create an single field index
+db.tweets.createIndex({"timestamp_ms":1})
